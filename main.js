@@ -1,4 +1,5 @@
 
+
 var result = `
     /* 面试官你好，我是XXX
     * 我将以动画的形式来介绍我自己
@@ -30,44 +31,87 @@ var result = `
 
     /*加点3D效果吧*/
     #code{
-        transform: skew(20deg, 20deg);
-        transform: skewX(10deg);
+        transform: rotate(360deg);
+    }
+
+    /*不玩了，我来介绍一下我自己吧*/
+    /*我需要一张白纸*/
+    #code{
+        position:fixed;
+        left:0;
+        width:50%;
     }
 `
-
-var n = 0;
-var id = setInterval(() =>{
-    n += 1
-    code.innerHTML = result.substring(0,n)
-    code.innerHTML = Prism.highlight(code.innerHTML,Prism.languages.css);
-    styleTag.innerHTML = result.substring(0,n)
-    if(n >= result.length){
-        window.clearInterval(id)
-        fn2()
-        fn3(result)
+var result2 = `
+    #paper{
+        position:fixed;
+        right:0;
+        width:50%;
+        height:100%;
+        background:black;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        padding:10px;
     }
-},20)
+    #paper >.content{
+        background:white;
+        width:100%;
+        height:100%;
+        padding:10px;
+    }
+`
+var md =`
+#标题1
 
-function fn2(){
+##标题2
+
+###我叫XXX，毕业于XXX大学XXX专业
+`
+
+writeCode('',result,()=>{
+    createPaper(()=>{
+        writeCode(result,result2,()=>{
+            writeMarkdown(md)
+        })
+    })
+})
+
+function writeCode(prefix,code,fn){
+    let domCode = document.querySelector('#code')
+    let n = 0
+    let id = setInterval(() =>{
+        n += 1
+        domCode.innerHTML = Prism.highlight(prefix+code.substring(0,n),Prism.languages.css);
+        domCode.scrollTop = domCode.scrollHeight
+        styleTag.innerHTML = prefix+code.substring(0,n)
+        if(n >= code.length){
+            window.clearInterval(id)
+            fn.call()
+        }
+    },10)
+}
+
+function createPaper(fn){
     var paper = document.createElement('div')
     paper.id = 'paper'
+    var content =document.createElement('pre')
+    content.className = 'content'
+    paper.appendChild(content)
     document.body.appendChild(paper)
+    fn.call()
 }
 
-function fn3(preResult){
-    var result = `
-    #paper{
-        width:100px;height:100px;
-        background:red;
-    }
-    `
-    var n = 0;
-    var id = setInterval(() =>{
-    n += 1
-    code.innerHTML = Prism.highlight(preResult+result.substring(0,n),Prism.languages.css);
-    styleTag.innerHTML = preResult+result.substring(0,n)
-    if(n >= result.length){
-        window.clearInterval(id)
-    }
-},20)
+function writeMarkdown(markdown){
+    let domWords = document.querySelector('#paper >.content')
+    let n = 0
+    let id = setInterval(() =>{
+        n += 1
+        domWords.innerHTML = markdown.substring(0,n)
+        domWords.scrollTop = domWords.scrollHeight
+        if(n >= markdown.length){
+            window.clearInterval(id)
+        }
+    },10)
 }
+
