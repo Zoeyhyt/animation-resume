@@ -2,11 +2,28 @@
 
 .token.selector,
 .token.property,
-.token.function {
-    color: black;
+.token.function,
+.token.punctuation{
+    color:#0E1F37;
 }
+
 
 #code{
     height: 100vh;
+    overflow: hidden;
+}
+
+#paper{
+    position:fixed;
+    margin:18px;
+    right:0;
+    width:50%;
+    height:90vh;
+    background:#A0B8B4;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:16px;
+    border:1px solid #FBFCFC;
     overflow: hidden;
 }
